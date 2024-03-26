@@ -1,14 +1,17 @@
 name: Lighthouse Performance Test on Pixel Studios Website
 
-on: [push]
+on:
+  push:
+    branches:
+      - main # Ensure this matches the name of your primary branch (e.g., 'main' or 'master')
 
 jobs:
   performance-test:
     runs-on: ubuntu-latest
+    
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-      
+    - uses: actions/checkout@v2
+    
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
@@ -18,10 +21,11 @@ jobs:
       run: npm install -g lighthouse
       
     - name: Run Lighthouse
-      run: lighthouse https://www.pixel-studios.com/ --output json --output-path ./lighthouse-results.json --quiet --chrome-flags="--headless"
+      run: lighthouse https://www.pixel-studios.com/ --output=json --output-path=./lighthouse-results.json --quiet --chrome-flags="--headless --no-sandbox"
       
     - name: Upload Lighthouse Results
       uses: actions/upload-artifact@v2
       with:
         name: Lighthouse Results
         path: ./lighthouse-results.json
+
